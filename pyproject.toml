@@ -1,0 +1,40 @@
+[project]
+name = "batteryagent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=1.2.0",
+    "chromadb>=1.5.9",
+    "docling>=2.124.0",
+    "flagembedding>=1.4.2",
+    "h5py>=3.16.0",
+    "jupyter>=1.1.1",
+    "langchain-text-splitters>=1.1.2",
+    "langfuse>=4.15.1",
+    "litellm>=1.98.0",
+    "matplotlib>=3.11.1",
+    "numpy>=2.4.6",
+    "openai>=2.54.0",
+    "pandas>=3.0.5",
+    "pyarrow>=25.0.1",
+    "pymupdf4llm>=1.28.2",
+    "pytest>=9.1.1",
+    "python-dotenv>=1.2.3",
+    "pyyaml>=6.0.3",
+    "ragas>=0.4.3",
+    "rank-bm25>=0.2.2",
+    "rich>=14.3.4",
+    "ruff>=0.16.5",
+    "scipy>=1.17.1",
+    "streamlit>=1.62.0",
+    "tiktoken>=0.14.0",
+]
+
+[project.scripts]
+batteryagent = "batteryagent:main"
+
+[build-system]
+requires = ["uv_build>=0.12.4,<0.13.0"]
+build-backend = "uv_build"

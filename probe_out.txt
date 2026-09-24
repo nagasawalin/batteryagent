@@ -1,0 +1,100 @@
+======================================================================
+file        : 2017-05-12_batchdata_updated_struct_errorcorrect.mat
+size        : 3,025,320,241 bytes (3.03 GB)
+header      : MATLAB 7.3 MAT-file, Platform: MACI64, Created on: Wed Dec 12 14:05:35 2018 HDF5 schema 1.00 .
+hdf5 magic  : True
+VERDICT     : v7.3 (HDF5) -> use h5py
+======================================================================
+root keys: ['#refs#', '#subsystem#', 'batch', 'batch_date']
+(skipping internal store '#refs#': 100004 entries)
+(skipping internal store '#subsystem#': 1 entries)
++ /batch  group  (8 children)
+  - Vdlin  dataset  shape=(46, 1)  dtype=ref[]
+      -> deref[0] Dataset
+      - t5m  dataset  shape=(1, 1000)  dtype=float64
+          first value: np.float64(3.5)
+  - barcode  dataset  shape=(46, 1)  dtype=ref[]
+      -> deref[0] Dataset
+      - Fb  dataset  shape=(1, 6)  dtype=uint32
+          first value: np.uint32(3707764736)
+  - channel_id  dataset  shape=(46, 1)  dtype=ref[]
+      -> deref[0] Dataset
+      - pc  dataset  shape=(1, 6)  dtype=uint32
+          first value: np.uint32(3707764736)
+  - cycle_life  dataset  shape=(46, 1)  dtype=ref[]
+      -> deref[0] Dataset
+      - 0c  dataset  shape=(1, 1)  dtype=float64
+          first value: np.float64(1190.0)
+  - cycles  dataset  shape=(46, 1)  dtype=ref[]
+      -> deref[0] Group
+      + /#refs#/Td  group  (9 children)
+        - I  dataset  shape=(1189, 1)  dtype=ref[]
+            -> deref[0] Dataset
+            - r0  dataset  shape=(2,)  dtype=uint64
+                first value: np.uint64(0)
+        - Qc  dataset  shape=(1189, 1)  dtype=ref[]
+            -> deref[0] Dataset
+            - gQ  dataset  shape=(2,)  dtype=uint64
+                first value: np.uint64(0)
+        - Qd  dataset  shape=(1189, 1)  dtype=ref[]
+            -> deref[0] Dataset
+            - Y5b  dataset  shape=(2,)  dtype=uint64
+                first value: np.uint64(0)
+        - Qdlin  dataset  shape=(1189, 1)  dtype=ref[]
+            -> deref[0] Dataset
+            - 0nc  dataset  shape=(2,)  dtype=uint64
+                first value: np.uint64(0)
+        - T  dataset  shape=(1189, 1)  dtype=ref[]
+            -> deref[0] Dataset
+            - NLb  dataset  shape=(2,)  dtype=uint64
+                first value: np.uint64(0)
+        - Tdlin  dataset  shape=(1189, 1)  dtype=ref[]
+            -> deref[0] Dataset
+            - kHc  dataset  shape=(2,)  dtype=uint64
+                first value: np.uint64(0)
+        - V  dataset  shape=(1189, 1)  dtype=ref[]
+            -> deref[0] Dataset
+            - Csb  dataset  shape=(2,)  dtype=uint64
+                first value: np.uint64(0)
+        - discharge_dQdV  dataset   shape=(1189, 1)  dtype=ref[]
+            -> deref[0] Dataset
+            - Ud  dataset  shape=(2,)  dtype=uint64
+                first value: np.uint64(0)
+        - t  dataset  shape=(1189, 1)  dtype=ref[]
+            -> deref[0] Dataset
+            - 6w  dataset  shape=(2,)  dtype=uint64
+                first value: np.uint64(0)
+  - policy  dataset  shape=(46, 1)  dtype=ref[]
+      -> deref[0] Dataset
+      - b  dataset  shape=(15, 1)  dtype=uint16
+          as string: '3_6C-80PER_3_6C'
+          first value: np.uint16(51)
+  - policy_readable  dataset  shape=(46, 1)  dtype=ref[]
+      -> deref[0] Dataset
+      - V  dataset  shape=(14, 1)  dtype=uint16
+          as string: '3.6C(80%)-3.6C'
+          first value: np.uint16(51)
+  - summary  dataset  shape=(46, 1)  dtype=ref[]
+      -> deref[0] Group
+      + /#refs#/#c/J4m  group  (8 children)
+        - IR  dataset  shape=(1, 1189)  dtype=float64
+            first value: np.float64(0.0)
+        - QCharge  dataset  shape=(1, 1189)  dtype=float64
+            first value: np.float64(0.0)
+        - QDischarge  dataset  shape=(1, 1189)  dtype=float64
+            first value: np.float64(0.0)
+        - Tavg  dataset  shape=(1, 1189)  dtype=float64
+            first value: np.float64(0.0)
+        - Tmax  dataset  shape=(1, 1189)  dtype=float64
+            first value: np.float64(0.0)
+        - Tmin  dataset  shape=(1, 1189)  dtype=float64
+            first value: np.float64(0.0)
+        - chargetime  dataset  shape=(1, 1189)  dtype=float64
+            first value: np.float64(0.0)
+        - cycle  dataset  shape=(1, 1189)  dtype=float64
+            first value: np.float64(1.0)
+- batch_date  dataset  shape=(10, 1)  dtype=uint16
+    as string: '2017-05-12'
+    first value: np.uint16(50)
+
+done.
