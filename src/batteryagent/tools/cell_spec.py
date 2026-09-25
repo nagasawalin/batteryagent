@@ -29,9 +29,16 @@ CACHE_DIR = path("processed")   # absolute, independent of cwd
 # are the reference answers for the specification questions S1-S5, so any
 # change here changes those references: re-run scripts/build_questions.py.
 #
-# Still unverified: `charge_tail`. The Methods state the policy up to 80% SOC;
-# the protocol above 80% is taken from the dataset documentation and has not
-# been confirmed against the Supplementary Information.
+# `charge_tail`: an earlier reading of the Methods (MIT-hosted PDF) found the
+# sentence "1C CC-CV to 3.6 V, cut-off C/50" for 80->100% SOC. The time series
+# of b1c7 and b1c45 (cycle 101) show the matching shape: a 1C constant-current
+# step followed by a decaying current. CHECK before submission: re-read that
+# Methods sentence yourself; voltage and cut-off current were not checked in
+# the data. The value is unchanged, so S1-S5 need no regeneration.
+#
+# CHANGED 2026-09-25: `batch_note` and `cell_id_convention` below. Neither key
+# enters the S1-S5 reference facts (build_questions.spec() picks a fixed key
+# list), so eval/questions.jsonl does NOT need to be regenerated.
 # --------------------------------------------------------------------------
 CELL_SPEC: dict = {
     "manufacturer": "A123 Systems",
@@ -50,8 +57,14 @@ CELL_SPEC: dict = {
     "ir_measurement": ("internal resistance is the average over ten +/-3.6C "
                        "current pulses applied at 80% SOC; a single scalar per "
                        "cycle, not an impedance spectrum"),
-    "batch_note": ("batch 1 (2017-05-12) includes a one-minute rest after "
-                   "charging, which the later batches do not"),
+    # CHANGED 2026-09-25: was "a one-minute rest after charging, which the
+    # later batches do not". The time series (b1c7, b1c45, cycle 101) show the
+    # rest at Qc = 0.880 Ah, i.e. at 80% SOC between the fast-charging steps and
+    # the 1C tail; charging ends and discharge starts with no rest in between.
+    # What the later batches do is not checked here, hence "differ".
+    "batch_note": ("batch 1 (2017-05-12) rests for one minute after reaching "
+                   "80% SOC, before the 1C tail; rest periods differ in the "
+                   "later batches"),
     "source": ("Severson et al., Nature Energy 4, 383-391 (2019), Methods; "
                "dataset documentation at data.matr.io"),
 }
@@ -96,6 +109,11 @@ def get_cell_spec(cell_id: str) -> dict:
     out.setdefault("exclusion_flag", None)
 
     # The dataset has no usable per-cell identifier: barcode and channel_id do
-    # not decode to text. Ids of the form b1c20 are assigned by this project.
-    out["cell_id_convention"] = "assigned by this work: b<batch><index>, 0-based"
+    # not decode to text, so cells are named by position in the batch.
+    # CHANGED 2026-09-25: was "assigned by this work". The official Python
+    # loader of the dataset (BuildPkl_Batch1.ipynb in the rdbraatz GitHub repo)
+    # builds exactly these keys, 'b1c' + str(i) over the same 0-based index, so
+    # the convention is the dataset's, not ours.
+    out["cell_id_convention"] = ("position in the batch, 0-based: b<batch>c<index>; "
+                                 "follows the dataset's official Python loader")
     return out

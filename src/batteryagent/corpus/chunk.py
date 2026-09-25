@@ -56,6 +56,11 @@ def chunk_doc(meta: dict, blocks: list[dict], size: int, overlap: int,
               min_tokens: int) -> list[dict]:
     chunks: list[dict] = []
     buf: list[tuple[str, int | None, int, bool]] = []   # (sentence, page, ntok, para_start)
+    # CHANGED 2026-09-25: buf starts with the overlap copied from the previous
+    # chunk. The old flush() treated those sentences as new content, so a short
+    # section tail produced a near-duplicate chunk (tested: 4 of 5 sentences
+    # copied) or, when merged, appended the overlap to the previous chunk twice.
+    n_carried = 0                                       # leading items of buf copied as overlap
     section = ""
 
     def emit(items, kind="text", sec=None):
@@ -74,18 +79,20 @@ def chunk_doc(meta: dict, blocks: list[dict], size: int, overlap: int,
         })
 
     def flush(carry: bool):
-        nonlocal buf
+        nonlocal buf, n_carried
         if not buf:
             return
-        n = sum(x[2] for x in buf)
-        if (n < min_tokens and chunks and chunks[-1]["section"] == section
+        new = buf[n_carried:]                       # sentences not already in chunks[-1]
+        n_new = sum(x[2] for x in new)
+        if (n_new < min_tokens and chunks and chunks[-1]["section"] == section
                 and chunks[-1]["kind"] == "text"):
-            prev = chunks[-1]                       # merge a small tail
-            prev["text"] += " " + " ".join(x[0] for x in buf)
-            prev["n_tokens"] += n
-            pages = [x[1] for x in buf if x[1] is not None]
-            if pages:
-                prev["page_end"] = max(prev["page_end"] or 0, max(pages))
+            prev = chunks[-1]                       # merge a small tail, without the overlap
+            if new:
+                prev["text"] += " " + " ".join(x[0] for x in new)
+                prev["n_tokens"] += n_new
+                pages = [x[1] for x in new if x[1] is not None]
+                if pages:
+                    prev["page_end"] = max(prev["page_end"] or 0, max(pages))
         else:
             emit(buf)
         if carry:                                   # overlap: trailing sentences
@@ -95,9 +102,9 @@ def chunk_doc(meta: dict, blocks: list[dict], size: int, overlap: int,
                     break
                 tail.insert(0, (item[0], item[1], item[2], False))
                 t += item[2]
-            buf = tail
+            buf, n_carried = tail, len(tail)
         else:
-            buf = []
+            buf, n_carried = [], 0
 
     for b in blocks:
         if b["kind"] == "heading":

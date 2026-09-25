@@ -63,7 +63,10 @@ def main() -> int:
     for s in a.systems:
         for q in qs:
             f = run_dir / "traces" / s / f"{q['id']}.json"
-            if f.exists() and json.loads(f.read_text())["status"] == "ok":
+            # CHANGED 2026-09-25: was `== "ok"`, which re-ran (and overwrote)
+            # every C trace that ended in step_limit / token_budget on each
+            # resume. Those are valid results; only crashed runs are redone.
+            if f.exists() and json.loads(f.read_text())["status"] != "error":
                 continue
             text, qid = runtime_view(q)
             d = ALL[s](text, qid, run_dir)

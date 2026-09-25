@@ -29,6 +29,13 @@ SUMMARY_FIELDS = (
 )
 
 # Within-cycle time series living under batch/cycles.
+# CHANGED 2026-09-25 (comment only), inferred from b1c7 / b1c45 cycle 101:
+#   t  is in minutes;  Qc / Qd in Ah;
+#   I  is stored as C-rate, NOT amperes (plateaus at +4.8/+8/+3.6/-4, while the
+#      charge throughput implies 8.8 A for the 8C step = 8 x 1.1 Ah).
+#   Policy steps switch on charge throughput (Qc = 0.385 / 0.880 Ah), i.e. the
+#   "SOC" in a policy string is relative to the NOMINAL 1.1 Ah.
+# No tool reads these series; the notes are for the report.
 CYCLE_FIELDS = (
     "t", "I", "V", "Qc", "Qd", "T", "Qdlin", "Tdlin", "discharge_dQdV",
 )

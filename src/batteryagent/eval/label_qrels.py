@@ -22,7 +22,10 @@ import textwrap
 from ..config import path
 
 POOL = ("bm25", "dense", "hybrid_rerank")
-PER_RETRIEVER = 8
+# CHANGED 2026-09-25: was 8. The ablation reports recall@10, so the pool must
+# reach at least rank 10 of every retriever; otherwise ranks 9-10 are never
+# labelled and silently count as irrelevant.
+PER_RETRIEVER = 10
 
 
 def main() -> int:

@@ -54,6 +54,17 @@ def main() -> int:
     run_dir = path("runs") / ap.parse_args().run_id
     df = load(run_dir)
 
+    # CHANGED 2026-09-25: the judge may return reasoning = null ("no explanation
+    # asked"), and may do so for one system but not another on the same
+    # question. Reasoning is therefore compared only on questions where every
+    # system got a score, so the per-system means cover the same questions.
+    n_sys = df.system.nunique()
+    same = df.groupby("qid")["reasoning"].transform(
+        lambda s: bool(s.notna().all()) and len(s) == n_sys).astype(bool)
+    df.loc[~same, "reasoning"] = None
+    print(f"reasoning compared on {df.loc[same, 'qid'].nunique()} questions; "
+          f"judgements per system: {df.groupby('system').size().to_dict()}\n")
+
     by_sys = df.groupby("system")[COLS].mean().round(2)
     by_sys.to_csv(run_dir / "results_by_system.csv")
     (run_dir / "results_by_system.tex").write_text(to_latex(by_sys))

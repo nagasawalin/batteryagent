@@ -67,5 +67,8 @@ baseline_d:
   max_context_tokens: 150000                # budget for the core papers' full text
 
 judge:
-  max_evidence_chars: 40000
+  # CHANGED 2026-09-25: was 40000, which could cut the end of System C's
+  # evidence (the literature results). 200k chars is ~50k tokens, well inside
+  # the judge's context window. judge.py prints any truncation that remains.
+  max_evidence_chars: 200000
   seed: 0

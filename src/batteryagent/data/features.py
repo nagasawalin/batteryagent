@@ -1,9 +1,21 @@
 """
 batteryagent/data/features.py — derived per-cell quantities.
 
-Single source of truth. The inventory script (reporting) and
-tools/cell_data.py (runtime) both import from here, so a number in the report
-and the same number in an agent answer cannot drift apart.
+Single source of truth for the runtime and the references:
+tools/cell_data.py (runtime) and scripts/build_questions.py (reference facts)
+both import from here, so a number in a reference answer and the same number
+in an agent answer cannot drift apart.
+
+CHANGED 2026-09-25 (docstring only): this used to say the inventory script
+imports from here too. It does not: scripts/inventory_severson.py keeps its
+own derive() with the same formulas and the same cycles_to_capacity(). Do not
+claim in the report that the inventory table comes from this file.
+
+Note on chargetime (checked 2026-09-25 on b1c7 / b1c45, cycle 101): the native
+`chargetime` field is the duration of the fast-charging step from 0 to 0.88 Ah
+(80% of nominal), in minutes -- not the whole charge (~30 min). It rises
+steeply in the last quarter of life, so chargetime_mean_min below reflects
+both the policy and ageing.
 
 Nothing in this file is a dataset field. Every quantity below is defined here
 and must appear in the report's column-definition table with its formula and

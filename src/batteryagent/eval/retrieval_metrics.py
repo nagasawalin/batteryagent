@@ -39,8 +39,16 @@ def reciprocal_rank(ranked: list[dict], relevant: list[dict]) -> float:
 
 
 def evaluate(search, qrels: list[dict], ks=(5, 10)) -> dict:
-    """search(query, k) -> ranked chunks. Returns means and per-query rows."""
+    """search(query, k) -> ranked chunks. Returns means and per-query rows.
+
+    CHANGED 2026-09-25: queries labelled with NO relevant item are excluded
+    from the means and counted in n_no_relevant. They used to score recall 0
+    and RR 0 for every variant, which lowered all means without telling the
+    variants apart.
+    """
     kmax = max(ks)
+    n_no_rel = sum(1 for q in qrels if not q["relevant"])
+    qrels = [q for q in qrels if q["relevant"]]
     rows = []
     for q in qrels:
         ranked = search(q["query"], kmax)
@@ -52,4 +60,6 @@ def evaluate(search, qrels: list[dict], ks=(5, 10)) -> dict:
     means = {key: round(sum(r[key] for r in rows) / n, 3)
              for key in rows[0] if key != "qid"} if rows else {}
     means["mrr"] = means.pop("rr", 0.0)
+    means["n_queries"] = len(rows)
+    means["n_no_relevant"] = n_no_rel
     return {"mean": means, "per_query": rows}

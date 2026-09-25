@@ -107,13 +107,36 @@ def parse_pymupdf(pdf: Path) -> list[dict]:
 
 
 # ------------------------------------------------------------------ common
+# CHANGED 2026-09-25: cut_at_references used to truncate the whole paper at the
+# first "References" heading after the first third, which drops a Methods
+# section printed after the reference list (e.g. possibly severson2019, a core
+# paper for system D). Now the stop section is skipped and inclusion resumes at
+# a Methods/Experimental/Appendix heading. Check after parsing:
+#   grep -c "C/50" data/processed/parsed/severson2019.json
+# Nature-family papers print the main-text reference list BEFORE the Methods
+# section. A heading like these ends a skipped stretch instead of the paper
+# being truncated at the first "References".
+RESUME_SECTION = re.compile(
+    r"^\W*(\d+(\.\d+)*\.?\s*)?(online\s+)?(methods|materials and methods|"
+    r"experimental( section| methods)?|appendix)\b",
+    re.I,
+)
+
+
 def cut_at_references(blocks: list[dict]) -> tuple[list[dict], bool]:
+    """Drop reference lists and back matter; keep a Methods section printed after them."""
+    out, skipping, cut = [], False, False
     for i, b in enumerate(blocks):
-        if b["kind"] == "heading" and STOP_SECTION.match(b["text"]):
+        if b["kind"] == "heading":
             # never cut in the first third: some papers put "Data availability" early
-            if i > len(blocks) / 3:
-                return blocks[:i], True
-    return blocks, False
+            if STOP_SECTION.match(b["text"]) and i > len(blocks) / 3:
+                skipping, cut = True, True
+                continue
+            if skipping and RESUME_SECTION.match(b["text"]):
+                skipping = False
+        if not skipping:
+            out.append(b)
+    return out, cut
 
 
 def parse_one(pdf: Path, parser: str = "docling") -> tuple[list[dict], str]:

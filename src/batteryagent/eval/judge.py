@@ -95,7 +95,17 @@ def evidence(trace: dict) -> str:
 
 
 def build_prompt(q: dict, trace: dict) -> str:
-    ev = evidence(trace)[: cfg()["judge"]["max_evidence_chars"]]
+    # CHANGED 2026-09-25: truncation used to be silent. Evidence for C is the
+    # tool results in call order, so a cut removes the LAST results (usually
+    # the literature) and lowers C's grounded score systematically. The cap was
+    # raised in config.yaml; any remaining cut is printed and recorded.
+    full = evidence(trace)
+    cap = cfg()["judge"]["max_evidence_chars"]
+    trace["_evidence_chars"] = len(full)
+    if len(full) > cap:
+        print(f"  evidence truncated: {trace['system']} {trace['qid']} "
+              f"{len(full)} > {cap} chars")
+    ev = full[:cap]
     ref = q["reference"]
     return (f"QUESTION\n{q['question']}\n\n"
             f"REFERENCE FACTS\n{json.dumps(ref['facts'], ensure_ascii=False)}\n\n"
@@ -164,6 +174,7 @@ def main() -> int:
                "must_include": j.get("must_include", []),
                "must_not": j.get("must_not", []),
                "rationale": j.get("rationale", ""),
+               "evidence_chars": t.get("_evidence_chars"),   # CHANGED 2026-09-25
                "trajectory": score_trajectory(t, q)}
         done[(t["system"], t["qid"])] = rec
         print(f"[{i}/{len(jobs)}] judged")
