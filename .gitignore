@@ -1,5 +1,7 @@
 .env
 .venv/
 __pycache__/
-data/
+/data/
 traces/
+.DS_Store
+results/runs/

@@ -416,6 +416,7 @@ dependencies = [
     { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "scipy", version = "1.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "streamlit" },
+    { name = "tabulate" },
     { name = "tiktoken" },
 ]
 
@@ -445,6 +446,7 @@ requires-dist = [
     { name = "ruff", specifier = ">=0.16.5" },
     { name = "scipy", specifier = ">=1.17.1" },
     { name = "streamlit", specifier = ">=1.62.0" },
+    { name = "tabulate", specifier = ">=0.10.0" },
     { name = "tiktoken", specifier = ">=0.14.0" },
 ]
 

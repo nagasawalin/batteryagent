@@ -17,14 +17,15 @@ Two rules decide whether the agent is usable or makes things up:
 from __future__ import annotations
 
 from functools import lru_cache
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
+from ..config import path
+
 from ..data.features import derive_cell
 
-CACHE_DIR = Path("data/processed")
+CACHE_DIR = path("processed")   # absolute, independent of cwd
 
 SERIES_FIELDS = ("QDischarge", "IR", "Tavg", "Tmax", "chargetime", "QCharge")
 DEFAULT_FIELDS = ("QDischarge", "IR")

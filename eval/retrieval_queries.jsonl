@@ -1,0 +1,20 @@
+{"qid": "R01", "query": "lithium plating on graphite anode during fast charging", "serves": "M1;M4;C1"}
+{"qid": "R02", "query": "onset of nonlinear capacity fade knee point", "serves": "M1"}
+{"qid": "R03", "query": "transition from linear to accelerated aging", "serves": "M1"}
+{"qid": "R04", "query": "loss of lithium inventory versus loss of active material", "serves": "M5;M1"}
+{"qid": "R05", "query": "incremental capacity analysis to identify degradation modes", "serves": "M5"}
+{"qid": "R06", "query": "SEI growth consumes cyclable lithium", "serves": "M3"}
+{"qid": "R07", "query": "causes of internal resistance increase during cycling", "serves": "M3"}
+{"qid": "R08", "query": "capacity increase during early cycles of LiFePO4 graphite cells", "serves": "M2"}
+{"qid": "R09", "query": "anode overhang effect on measured capacity", "serves": "M2"}
+{"qid": "R10", "query": "cell-to-cell variation in cycle life of nominally identical cells", "serves": "C2"}
+{"qid": "R11", "query": "effect of temperature on lithium-ion cell ageing", "serves": "C6;T4"}
+{"qid": "R12", "query": "predicting cycle life from early-cycle discharge voltage curves", "serves": "M6"}
+{"qid": "R13", "query": "variance of the discharge capacity difference between cycles", "serves": "M6"}
+{"qid": "R14", "query": "multi-step fast charging protocol and cycle life", "serves": "C1;M4"}
+{"qid": "R15", "query": "closed-loop optimization of charging protocols", "serves": "C1"}
+{"qid": "R16", "query": "degradation of LiFePO4 cathode material", "serves": "M1;T6"}
+{"qid": "R17", "query": "dQ/dV peak shift interpretation", "serves": "M5"}
+{"qid": "R18", "query": "methods to detect lithium plating in commercial cells", "serves": "M4"}
+{"qid": "R19", "query": "calendar ageing compared with cycle ageing", "serves": "M3"}
+{"qid": "R20", "query": "impedance growth and SEI resistance", "serves": "M3"}

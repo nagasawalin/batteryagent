@@ -1,0 +1,71 @@
+# config.yaml — every path, model and threshold. No magic numbers in code.
+
+paths:
+  processed: data/processed                 # cells/summary parquet
+  papers: data/raw/papers                   # PDFs, named <doc_id>.pdf
+  sources: corpus/sources.csv               # literature register (committed)
+  parsed: data/processed/parsed             # <doc_id>.json page-tagged blocks
+  chunks: data/processed/chunks.jsonl
+  chunks_ctx: data/processed/chunks_ctx.jsonl
+  chroma: data/processed/chroma
+  rewrite_cache: data/processed/rewrite_cache.json
+  questions: eval/questions.jsonl
+  retrieval_queries: eval/retrieval_queries.jsonl
+  qrels: eval/qrels.jsonl
+  runs: results/runs                        # one folder per evaluation run
+  results: results
+
+models:
+  system: claude-sonnet-5                   # the model under test, same for A/B/C/D
+  helper: claude-haiku-4-5-20251001         # contextual retrieval + query rewriting
+  judge: gpt-4.1                            # DIFFERENT vendor (self-preference bias); via litellm
+  temperature: 0
+  max_tokens: 1500
+
+dataset_context: >-
+  The questions concern lithium-ion cells from the fast-charging cycling
+  dataset of Severson et al. (Nature Energy, 2019), batch 1. Individual
+  cells are referred to by identifiers of the form b1cN.
+
+chunking:
+  size_tokens: 512
+  overlap_tokens: 64                        # 12.5%
+  min_tokens: 40                            # smaller tail is merged into the previous chunk
+
+contextual:
+  max_doc_tokens: 40000                     # document text sent with each chunk (cached)
+  workers: 4
+
+retrieval:
+  embed_model: BAAI/bge-m3
+  rerank_model: BAAI/bge-reranker-v2-m3
+  embed_batch: 16
+  embed_max_length: 1024
+  dense_k: 30
+  bm25_k: 30
+  rrf_k: 60
+  rerank_in: 30
+  final_k: 5
+  runtime_variant: hybrid_rerank            # used by search_literature and system B; set after the ablation
+
+retrieval_variants:
+  dense:                     {mode: dense,  rerank: false, contextual: false, rewrite: false}
+  bm25:                      {mode: bm25,   rerank: false, contextual: false, rewrite: false}
+  hybrid:                    {mode: hybrid, rerank: false, contextual: false, rewrite: false}
+  hybrid_rerank:             {mode: hybrid, rerank: true,  contextual: false, rewrite: false}
+  hybrid_rerank_ctx:         {mode: hybrid, rerank: true,  contextual: true,  rewrite: false}
+  hybrid_rerank_ctx_rewrite: {mode: hybrid, rerank: true,  contextual: true,  rewrite: true}
+
+agent:
+  max_steps: 6
+  max_total_tokens: 80000                   # input+output across the whole loop
+
+baseline_b:
+  k: 5
+
+baseline_d:
+  max_context_tokens: 150000                # budget for the core papers' full text
+
+judge:
+  max_evidence_chars: 40000
+  seed: 0

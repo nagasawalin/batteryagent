@@ -14,21 +14,24 @@ wording.
 from __future__ import annotations
 
 from functools import lru_cache
-from pathlib import Path
 
 import pandas as pd
 
+from ..config import path
+
 from ..data.features import parse_policy
 
-CACHE_DIR = Path("data/processed")
+CACHE_DIR = path("processed")   # absolute, independent of cwd
 
 # --------------------------------------------------------------------------
-# VERIFY BEFORE THE REPORT IS SUBMITTED.
-# These values become the reference answers for the specification questions,
-# so each one must be checked line by line against the dataset page on
-# data.matr.io and the Methods section of Severson et al., Nature Energy 2019.
-# The charge tail in particular (protocol above the switch SOC, cut-off
-# current) is the least certain entry here.
+# Checked line by line against the Methods of Severson et al., Nature Energy 4,
+# 383-391 (2019), and the dataset documentation at data.matr.io. These values
+# are the reference answers for the specification questions S1-S5, so any
+# change here changes those references: re-run scripts/build_questions.py.
+#
+# Still unverified: `charge_tail`. The Methods state the policy up to 80% SOC;
+# the protocol above 80% is taken from the dataset documentation and has not
+# been confirmed against the Supplementary Information.
 # --------------------------------------------------------------------------
 CELL_SPEC: dict = {
     "manufacturer": "A123 Systems",
@@ -40,10 +43,16 @@ CELL_SPEC: dict = {
     "nominal_capacity_Ah": 1.1,
     "voltage_window_V": [2.0, 3.6],
     "ambient_temperature_C": 30,
-    "discharge_protocol": "4C constant current to 2.0 V, identical for every cell",
+    "discharge_protocol": ("4C CC-CV to 2.0 V, cut-off C/50, identical for "
+                           "every cell"),
     "charge_tail": "1C CC-CV to 3.6 V from 80% SOC, cut-off C/50",
     "eol_definition": "discharge capacity at 80% of nominal, i.e. 0.88 Ah",
-    "source": ("Severson et al., Nature Energy 4, 383-391 (2019); "
+    "ir_measurement": ("internal resistance is the average over ten +/-3.6C "
+                       "current pulses applied at 80% SOC; a single scalar per "
+                       "cycle, not an impedance spectrum"),
+    "batch_note": ("batch 1 (2017-05-12) includes a one-minute rest after "
+                   "charging, which the later batches do not"),
+    "source": ("Severson et al., Nature Energy 4, 383-391 (2019), Methods; "
                "dataset documentation at data.matr.io"),
 }
 

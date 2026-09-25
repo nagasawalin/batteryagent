@@ -29,6 +29,7 @@ dependencies = [
     "ruff>=0.16.5",
     "scipy>=1.17.1",
     "streamlit>=1.62.0",
+    "tabulate>=0.10.0",
     "tiktoken>=0.14.0",
 ]
 
