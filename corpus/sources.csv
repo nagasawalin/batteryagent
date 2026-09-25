@@ -1,2 +1,29 @@
 doc_id,title,year,doi,filename,core,serves
-severson2019,Data-driven prediction of battery cycle life before capacity degradation,2019,10.1038/s41560-019-0356-8,severson2019.pdf,1,M6;C1
+troltzsch2006,Characterizing aging effects of lithium ion batteries by impedance spectroscopy,2006,10.1016/j.electacta.2005.02.148,troltzsch2006.pdf,0,M3
+wright2003,Power fade and capacity fade resulting from cycle-life testing of Advanced Technology Development Program lithium-ion batteries,2003,10.1016/S0378-7753(03)00190-3,wright2003.pdf,0,M3
+bloom2005,"Differential voltage analyses of high-power, lithium-ion cells",2005,10.1016/j.jpowsour.2004.07.021,bloom2005.pdf,0,M5
+vetter2005,Ageing mechanisms in lithium-ion batteries,2005,10.1016/j.jpowsour.2005.01.006,vetter2005.pdf,0,M1;M3;T4
+dubarry2012,Synthesize battery degradation modes via a diagnostic and prognostic model,2012,10.1016/j.jpowsour.2012.07.016,dubarry2012.pdf,1,M5
+baumhofer2014,Production caused variation in capacity aging trend and correlation to initial cell performance,2014,10.1016/j.jpowsour.2013.08.108,baumhofer2014.pdf,0,C2;C1
+schuster2015b,Lithium-ion cell-to-cell variation during battery electric vehicle operation,2015,10.1016/j.jpowsour.2015.08.001,schuster2015b.pdf,0,C2
+ansean2016,Fast charging technique for high power LiFePO4 batteries: A mechanistic analysis of aging,2016,10.1016/j.jpowsour.2016.04.140,ansean2016.pdf,0,M1;M4;C1
+birkl2017,Degradation diagnostics for lithium ion cells,2017,10.1016/j.jpowsour.2016.12.011,birkl2017.pdf,1,M5;M1
+harris2017,Failure statistics for commercial lithium ion batteries: A study of 24 pouch cells,2017,10.1016/j.jpowsour.2016.12.083,harris2017.pdf,0,C2
+lewerenz2017a,Systematic aging of commercial LiFePO 4 |Graphite cylindrical cells including a theory explaining rise of capacity during aging,2017,10.1016/j.jpowsour.2017.01.133,lewerenz2017a.pdf,0,M2
+ansean2017,Operando lithium plating quantification and early detection of a commercial LiFePO4 cell cycled under dynamic driving schedule,2017,10.1016/j.jpowsour.2017.04.072,ansean2017.pdf,0,M1;M4
+yang2017,Modeling of lithium plating induced aging of lithium-ion batteries: Transition from linear to nonlinear aging,2017,10.1016/j.jpowsour.2017.05.110,yang2017.pdf,0,M1
+ahmed2017,Enabling fast charging – A battery technology gap assessment,2017,10.1016/j.jpowsour.2017.06.055,ahmed2017.pdf,0,M4;C1
+lewerenz2017b,Differential voltage analysis as a tool for analyzing inhomogeneous aging: A case study for LiFePO4|Graphite cylindrical cells,2017,10.1016/j.jpowsour.2017.09.059,lewerenz2017b.pdf,0,M5
+schuster2015a,Nonlinear aging characteristics of lithium-ion cells under different operational conditions,2015,10.1016/j.est.2015.05.003,schuster2015a.pdf,0,M1;C2
+edge2021,Lithium ion battery degradation: what you need to know,2021,10.1039/d1cp00359c,edge2021.pdf,1,T4;T6;C6;M1;M5
+attia2022,Review—“Knees” in Lithium-Ion Battery Aging Trajectories,2022,10.1149/1945-7111/ac6d13,attia2022.pdf,1,M1
+gyenes2015,Understanding Anomalous Behavior in Coulombic Efficiency Measurements on Li-Ion Batteries,2015,10.1149/2.0191503jes,gyenes2015.pdf,0,M2
+liu2010,Aging Mechanisms of LiFePO[sub 4] Batteries Deduced by Electrochemical and Structural Analyses,2010,10.1149/1.3294790,liu2010.pdf,0,M1;M3
+pinson2013,"Theory of SEI Formation in Rechargeable Batteries: Capacity Fade, Accelerated Aging and Lifetime Prediction",2013,10.1149/2.044302jes,pinson2013.pdf,0,M1;M3
+preger2020,Degradation of Commercial Lithium-Ion Cells as a Function of Chemistry and Cycling Conditions,2020,10.1149/1945-7111/abae37,preger2020.pdf,0,T6;T4;C6
+safari2011,Aging of a Commercial Graphite/LiFePO4 Cell,2011,10.1149/1.3614529,safari2011.pdf,0,M1;M3
+severson2019,Data-driven prediction of battery cycle life before capacity degradation,2019,10.1038/s41560-019-0356-8,severson2019.pdf,1,M6;M2;C1
+smith2011,High-Precision Differential Capacity Analysis of LiMn2O4/graphite Cells,2011,10.1149/1.3543569,smith2011.pdf,0,M5
+waldmann2014,A Mechanical Aging Mechanism in Lithium-Ion Batteries,2014,10.1149/2.1001410jes,waldmann2014.pdf,0,M3
+sarasketa2015,Understanding Lithium Inventory Loss and Sudden Performance Fade in Cylindrical Cells during Cycling with Deep-Discharge Steps,2015,10.1021/jp510071d,sarasketa2015.pdf,0,M5;M1
+waldmann2015,Influence of Cell Design on Temperatures and Temperature Gradients in Lithium-Ion Cells: An In Operando Study,2015,10.1149/2.0561506jes,waldmann2015.pdf,0,C6;T4
