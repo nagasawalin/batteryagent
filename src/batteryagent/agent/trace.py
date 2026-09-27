@@ -59,6 +59,8 @@ class Trace:
                           "input_tokens": sum(x.get("input_tokens", 0) for x in s),
                           "output_tokens": sum(x.get("output_tokens", 0) for x in s),
                           "cache_read_tokens": sum(x.get("cache_read_tokens", 0) for x in s),
+                          # CHANGED 2026-09-27: was missing; D's cached context is written here
+                          "cache_write_tokens": sum(x.get("cache_write_tokens", 0) for x in s),
                       })
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.path.write_text(json.dumps(self.d, indent=1, ensure_ascii=False, default=str))

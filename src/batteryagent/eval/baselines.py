@@ -45,7 +45,10 @@ def run_a(question: str, qid: str, run_dir: Path) -> dict:
 # ------------------------------------------------------------------ B
 def format_passages(hits: list[dict]) -> str:
     return "\n\n".join(
-        f"[{i}] doc_id={h['doc_id']}, p. {h['page_start']}, section: {h['section']}\n{h['text']}"
+        # CHANGED 2026-09-27: was "[i] doc_id=X, p. N", which B copied into its
+        # citations ("[doc_id=X, p. N]"), a style that told the judge it was B.
+        f"Passage {i} (cite as [{h['doc_id']}, p. {h['page_start']}]; "
+        f"section: {h['section']})\n{h['text']}"
         for i, h in enumerate(hits, 1))
 
 

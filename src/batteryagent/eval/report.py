@@ -83,7 +83,17 @@ def main() -> int:
     cost = []
     for f in (run_dir / "traces").glob("*/*.json"):
         t = json.loads(f.read_text())
-        cost.append({"system": t["system"], **t.get("totals", {}), "wall_s": t.get("wall_s")})
+        # CHANGED 2026-09-27: input_tokens excludes cached prompt tokens, so D's
+        # ~150k-token cached context showed up as a few dozen tokens. Count every
+        # prompt token from the llm steps (works for traces written before the fix).
+        llm = [x for x in t["steps"] if x["type"] == "llm"]
+        cost.append({"system": t["system"], **t.get("totals", {}),
+                     "cache_write_tokens": sum(x.get("cache_write_tokens", 0) for x in llm),
+                     "prompt_tokens_all": sum(x.get("input_tokens", 0)
+                                              + x.get("cache_read_tokens", 0)
+                                              + x.get("cache_write_tokens", 0) for x in llm),
+                     "wall_s": t.get("wall_s"),
+                     "answer_words": len((t.get("answer") or "").split())})
     cost = pd.DataFrame(cost).groupby("system").mean(numeric_only=True).round(1)
     cost.to_csv(run_dir / "cost.csv")
     print(cost.to_string())

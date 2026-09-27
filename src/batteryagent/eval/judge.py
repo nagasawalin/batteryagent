@@ -56,7 +56,10 @@ Return JSON only:
 {"factual": int, "grounded": int, "reasoning": int|null, "calibration": int,
  "must_include": [bool, ...], "must_not": [bool, ...], "rationale": "two sentences"}"""
 
-_CITE = re.compile(r"\[([A-Za-z0-9_\-]+),\s*p+\.?\s*(\d+)")
+# CHANGED 2026-09-27: the old pattern needed "[" right before the doc_id, so in
+# "[severson2019, p. 6; attia2022, p. 7]" only the first source was found, and
+# "p. 9-10" gave page 9 only; D's evidence missed 3 of 10 cited pages on dev M1.
+_CITE = re.compile(r"([A-Za-z][A-Za-z\-]*\d{4}[a-z]?),\s*pp?\.?\s*(\d+)(?:\s*[–-]\s*(\d+))?")
 
 
 def _slim(result: dict) -> dict:
@@ -80,9 +83,14 @@ def evidence(trace: dict) -> str:
             f"{json.dumps(_slim(st['result']), ensure_ascii=False)}"
             for st in steps if st["type"] == "tool")
     if s == "D":
-        cited = sorted(set(_CITE.findall(trace.get("answer") or "")))
+        cited = set()
+        for doc_id, lo, hi in _CITE.findall(trace.get("answer") or ""):
+            lo, hi = int(lo), int(hi or lo)
+            if hi < lo or hi - lo > 5:          # typo guard: treat as a single page
+                hi = lo
+            cited |= {(doc_id, str(p)) for p in range(lo, hi + 1)}
         parts = []
-        for doc_id, page in cited:
+        for doc_id, page in sorted(cited):
             f = path("parsed") / f"{doc_id}.json"
             if not f.exists():
                 parts.append(f"[{doc_id}, p. {page}] (no such document in the corpus)")
