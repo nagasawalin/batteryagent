@@ -18,7 +18,7 @@ paths:
 models:
   system: claude-sonnet-4-6                   # the model under test, same for A/B/C/D
   helper: claude-haiku-4-5-20251001         # contextual retrieval + query rewriting
-  judge: gpt-4.1                            # DIFFERENT vendor (self-preference bias); via litellm
+  judge: anthropic/claude-sonnet-4-6  # CHANGED 2026-09-27: was gpt-4.1 (no OpenAI account); haiku-4-5 rejected on dev (attributed reference numbers to answers); same model as the system, see Limitations
   temperature: 0
   max_tokens: 1500
 

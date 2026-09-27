@@ -39,7 +39,8 @@ Score each dimension from 1 (worst) to 5 (best):
 
 factual     - Numbers and facts agree with the reference facts. A number absent
               from the reference is not wrong by default; judge it against the
-              evidence.
+              evidence. A fact the question needs but the answer does not give
+              counts against this score; omission is not neutral.
 grounded    - Every factual claim is supported by the evidence shown, or is
               explicitly marked as general knowledge or as uncertain. Invented
               citations score 1.
@@ -49,12 +50,26 @@ calibration - Confidence matches what the evidence supports: uncertainty is
               stated where the evidence is insufficient, and nothing is
               claimed that the evidence cannot support.
 
-Also check the reference's must_include points (true if the answer covers
-the point) and must_not points (true if the answer VIOLATES it).
+The REFERENCE FACTS, MUST INCLUDE and MUST NOT lists describe what a correct
+answer contains; they are NOT part of the answer. Credit the answer only for
+what the ANSWER TO GRADE itself says.
+
+For each MUST INCLUDE point, in order: "met" is true only if the answer
+covers it, and "quote" is a verbatim excerpt of at most 25 words copied from
+the ANSWER TO GRADE that shows it (null if not met).
+For each MUST NOT point, in order: "violated" is true only if the answer does
+what the point forbids, and "quote" is the verbatim excerpt that does it
+(null if not violated).
+
+Work in this order and fill the JSON fields in this order: first copy what
+the answer actually states, then check the points, and only then score.
 
 Return JSON only:
-{"factual": int, "grounded": int, "reasoning": int|null, "calibration": int,
- "must_include": [bool, ...], "must_not": [bool, ...], "rationale": "two sentences"}"""
+{"answer_states": ["verbatim excerpt of each number or key claim in the ANSWER TO GRADE, at most 8"],
+ "must_include": [{"met": bool, "quote": str|null}, ...],
+ "must_not": [{"violated": bool, "quote": str|null}, ...],
+ "factual": int, "grounded": int, "reasoning": int|null, "calibration": int,
+ "rationale": "two sentences"}"""
 
 # CHANGED 2026-09-27: the old pattern needed "[" right before the doc_id, so in
 # "[severson2019, p. 6; attia2022, p. 7]" only the first source was found, and
@@ -120,13 +135,44 @@ def build_prompt(q: dict, trace: dict) -> str:
             f"MUST INCLUDE\n{json.dumps(ref['must_include'])}\n\n"
             f"MUST NOT\n{json.dumps(ref['must_not'])}\n\n"
             f"EVIDENCE AVAILABLE TO THE ANSWERER\n{ev}\n\n"
-            f"ANSWER TO GRADE\n{trace.get('answer') or '(no answer produced)'}")
+            f"ANSWER TO GRADE (the only text being graded)\n"
+            f"{trace.get('answer') or '(no answer produced)'}")
 
 
 def parse_json(text: str) -> dict:
     text = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```")
     m = re.search(r"\{.*\}", text, re.S)
     return json.loads(m.group(0) if m else text)
+
+
+def _norm(s: str) -> str:
+    s = s.replace("\u2019", "'").replace("\u201c", '"').replace("\u201d", '"')
+    s = re.sub(r"[*_`#]", "", s)        # markdown marks would break verbatim matching
+    return re.sub(r"\s+", " ", s).strip().lower()
+
+
+def verified(items, answer: str | None, key: str) -> tuple[list[bool], list[dict]]:
+    """CHANGED 2026-09-27: a point counts only if the judge's quote is really in
+    the answer. On dev, haiku credited D (no data access) with fade numbers that
+    appear only in the reference facts, and marked a must_not as violated while
+    its rationale said the opposite. Quotes are checked as verbatim substrings
+    (whitespace and case normalised; '...' splits a quote into fragments that
+    must all be present)."""
+    ans = _norm(answer or "")
+    flags, detail = [], []
+    for it in items or []:
+        if isinstance(it, bool):                     # old schema: cannot verify
+            flags.append(it)
+            detail.append({key: it, "quote": None, "verified": None})
+            continue
+        claim = bool(it.get(key))
+        q = it.get("quote") or ""
+        frags = [_norm(f).strip(' "\'') for f in re.split(r"\.\.\.|\u2026", q)]
+        frags = [f for f in frags if f]
+        ok = bool(frags) and all(f in ans for f in frags)
+        flags.append(claim and ok)
+        detail.append({key: claim, "quote": q or None, "verified": ok if claim else None})
+    return flags, detail
 
 
 def call_judge(prompt: str) -> dict:
@@ -176,12 +222,17 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             print(f"judge failed on {t['system']} {t['qid']}: {exc}")
             continue
+        inc, inc_d = verified(j.get("must_include"), t.get("answer"), "met")
+        bad, bad_d = verified(j.get("must_not"), t.get("answer"), "violated")
         rec = {"system": t["system"], "qid": t["qid"], "type": q["type"],
                "judge_model": model,
                **{d: j.get(d) for d in DIMENSIONS},
-               "must_include": j.get("must_include", []),
-               "must_not": j.get("must_not", []),
+               "must_include": inc,
+               "must_not": bad,
+               "must_include_detail": inc_d,
+               "must_not_detail": bad_d,
                "rationale": j.get("rationale", ""),
+               "answer_states": j.get("answer_states"),     # CHANGED 2026-09-27: audit trail
                "evidence_chars": t.get("_evidence_chars"),   # CHANGED 2026-09-25
                "trajectory": score_trajectory(t, q)}
         done[(t["system"], t["qid"])] = rec
