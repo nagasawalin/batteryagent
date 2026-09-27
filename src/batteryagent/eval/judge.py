@@ -10,8 +10,10 @@ at a time (pointwise), so there is no answer order and hence no position
 bias; the job order is shuffled with a fixed seed only so that a mid-run
 failure does not hit one system systematically.
 
-The judge model comes from a different vendor than the system model
-(self-preference bias) and is called through litellm.
+The judge model is set in config.yaml and called through litellm. It was meant
+to come from a different vendor (self-preference bias); for lack of a second
+API it is claude-sonnet-4-6, the same model as the systems (CHANGED 2026-09-27,
+see Limitations). must_include / must_not decisions are quote-verified.
 
 Evidence per system
   A  none
