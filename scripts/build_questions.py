@@ -314,12 +314,28 @@ def build(inv, summary, R) -> list[dict]:
         q=f"Discharge capacity of cell {R['long']} rises during the first tens of "
           f"cycles before it fades. What could explain this initial rise?",
         cells=[R["long"]], facts=F(inv, R["long"], "cycle_at_q_max", "q_first_Ah", "q_max_Ah"),
+        # CHANGED 2026-09-27: the accepted explanation goes into must_include,
+        # because the judge sees facts, must_include and must_not but NOT notes.
         inc=["the rise from the data (cycle of peak, size)",
-             "a cited explanation", "uncertainty about which applies here"],
+             "a cited explanation; accepted: charge (lithium) stored in the part "
+             "of the negative electrode that extends beyond the positive electrode "
+             "(anode overhang / passive electrode effect); another explanation "
+             "counts only if the cited passage supports it",
+             "uncertainty about whether it applies to this cell (e.g. the storage "
+             "history before testing is not reported, the literature evidence "
+             "comes from other cells, or temperature affects the exact peak)"],
         bad=["states the cause without a citation"],
         tools=["get_cell_data", "search_literature"], lit=True,
-        notes="Accepted mechanism set to be fixed after the corpus is built "
-              "(domain check pending)."))
+        notes="Sources for the accepted explanation: severson2019 p. 3 (also: "
+              "capacity at cycle 100 exceeded the initial value for 81% of "
+              "cells); lewerenz2017a pp. 2, 4-5; gyenes2015 pp. 2, 4-6. Data "
+              "check 2026-09-27: the smooth rise plateaus near cycles 38-56 at "
+              "about 1.081 Ah; the maximum at cycle 70 coincides with a Tavg "
+              "excursion (32.6 C at cycle 68 vs about 30.8 C), and peak cycles "
+              "of all batch-1 cells cluster at 53-57 and 68-71, matching the "
+              "chamber temperature fluctuations near cycles 55 and 70 reported "
+              "in severson2019 pp. 5-6. Mentioning temperature is acceptable, "
+              "not required."))
     M.append(dict(
         q=f"Why might the internal resistance of cell {R['irmax']} increase with "
           f"cycling, and how is resistance growth related to capacity fade?",

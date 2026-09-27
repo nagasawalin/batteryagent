@@ -1,0 +1,2 @@
+doc_id,parser,blocks,chars,pages,tables,refs_cut,suspect
+schuster2015a,pymupdf,124,53113,9,2,True,False

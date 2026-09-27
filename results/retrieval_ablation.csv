@@ -1,0 +1,5 @@
+variant,recall@5,recall@10,mrr,n_queries,n_no_relevant,ms_per_query
+dense,0.423,0.656,0.643,19,1,171
+bm25,0.459,0.656,0.59,19,1,0
+hybrid,0.486,0.699,0.574,19,1,152
+hybrid_rerank,0.521,0.792,0.682,19,1,23798

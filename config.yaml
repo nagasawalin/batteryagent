@@ -16,7 +16,7 @@ paths:
   results: results
 
 models:
-  system: claude-sonnet-5                   # the model under test, same for A/B/C/D
+  system: claude-sonnet-4-6                   # the model under test, same for A/B/C/D
   helper: claude-haiku-4-5-20251001         # contextual retrieval + query rewriting
   judge: gpt-4.1                            # DIFFERENT vendor (self-preference bias); via litellm
   temperature: 0

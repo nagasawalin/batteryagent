@@ -33,9 +33,10 @@ def main() -> int:
     rows, per_q = [], []
     for name in a.variants:
         r = get_retriever(name)
+        r.search("warm-up", k=1)  # CHANGED 2026-09-25: load models outside the timer
         t = time.perf_counter()
         res = evaluate(lambda q, k: r.search(q, k=k), qrels)
-        ms = 1000 * (time.perf_counter() - t) / max(len(qrels), 1)
+        ms = 1000 * (time.perf_counter() - t) / max(res["mean"]["n_queries"], 1)
         rows.append({"variant": name, **res["mean"], "ms_per_query": round(ms)})
         per_q += [{"variant": name, **x} for x in res["per_query"]]
         print(rows[-1])

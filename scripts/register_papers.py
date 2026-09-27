@@ -53,7 +53,7 @@ REGISTER = [
     ("1-s2.0-S0378775317307619-main.pdf", "yang2017", "10.1016/j.jpowsour.2017.05.110", 0, "M1"),
     ("1-s2.0-S0378775317308388-main.pdf", "ahmed2017", "10.1016/j.jpowsour.2017.06.055", 0, "M4;C1"),
     ("1-s2.0-S0378775317312788-main.pdf", "lewerenz2017b", "10.1016/j.jpowsour.2017.09.059", 0, "M5"),
-    ("1-s2.0-S2352152X15000092-main.pdf", "schuster2015a", "10.1016/j.est.2015.05.003", 0, "M1;C2"),
+    # dropped 2026-09-25, garbled text after re-parse: ("1-s2.0-S2352152X15000092-main.pdf", "schuster2015a", "10.1016/j.est.2015.05.003", 0, "M1;C2"),
     ("6079702358aebb8e9ea0250d.pdf", "edge2021", "10.1039/d1cp00359c", 1, "T4;T6;C6;M1;M5"),
     ("Attia_2022_J._Electrochem._Soc._169_060517.pdf", "attia2022", "10.1149/1945-7111/ac6d13", 1, "M1"),
     ("Gyenes_2015_J._Electrochem._Soc._162_A278.pdf", "gyenes2015", "10.1149/2.0191503jes", 0, "M2"),
